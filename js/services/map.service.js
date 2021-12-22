@@ -1,5 +1,5 @@
-import { API_KEY } from "../personal.js";
-import { STORAGE } from "./storage.service.js";
+import { API_KEY } from '../personal.js';
+import { STORAGE } from './storage.service.js';
 
 export const mapService = {
   initMap,
@@ -8,7 +8,6 @@ export const mapService = {
 };
 
 var gMap;
-
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   const myLatLng = { lat: lat, lng: lng };
@@ -44,7 +43,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
       infoWindow.open(gMap);
     });
     console.log('Map!', gMap);
-});
+  });
 }
 
 function addMarker(loc) {
