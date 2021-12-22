@@ -31,7 +31,6 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
       infoWindow = new google.maps.InfoWindow({
         position: mapsMouseEvent.latLng,
       });
-      console.log(mapsMouseEvent.latLng.toJSON().lat.toFixed(2));
       infoWindow.setContent(
         `the Lat is ${mapsMouseEvent.latLng
           .toJSON()
@@ -72,8 +71,4 @@ function _connectGoogleApi() {
     elGoogleApi.onload = resolve;
     elGoogleApi.onerror = () => reject('Google script failed to load');
   });
-}
-
-function getLocationByClick(ev) {
-  console.log(ev);
 }

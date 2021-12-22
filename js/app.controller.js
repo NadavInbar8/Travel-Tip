@@ -31,8 +31,17 @@ function onAddMarker() {
 
 function onGetLocs() {
   locService.getLocs().then((locs) => {
-    console.log('Locations:', locs);
-    document.querySelector('.locs').innerText = JSON.stringify(locs);
+    // console.log('Locations:', locs);
+    const locations = locs;
+    let strHTML = '';
+    console.log(locations);
+    locations.map((location) => {
+      strHTML += `<tr>
+        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td>
+        </tr>`;
+    });
+    document.querySelector('tbody').innerHTML = strHTML;
+    // locations.document.querySelector('.locs').innerText = JSON.stringify(locs);
   });
 }
 
