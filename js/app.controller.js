@@ -1,5 +1,6 @@
 import { locService } from './services/loc.service.js';
 import { mapService } from './services/map.service.js';
+import { STORAGE } from './services/storage.service.js';
 
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
@@ -33,13 +34,20 @@ function onGetLocs() {
   locService.getLocs().then((locs) => {
     // console.log('Locations:', locs);
     const locations = locs;
+    const storageLocs = STORAGE.load(STORAGE.STORAGE_KEY);
+    console.log(storageLocs);
     let strHTML = '';
-    console.log(locations);
     locations.map((location) => {
       strHTML += `<tr>
         <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td>
         </tr>`;
     });
+    for (const key in storageLocs) {
+      console.log('hello');
+      strHTML += `<tr>
+        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td>
+        </tr>`;
+    }
     document.querySelector('tbody').innerHTML = strHTML;
     // locations.document.querySelector('.locs').innerText = JSON.stringify(locs);
   });

@@ -1,5 +1,6 @@
 import { API_KEY } from '../personal.js';
 import { STORAGE } from './storage.service.js';
+import { UTILS } from './utils.js';
 
 export const mapService = {
   initMap,
@@ -40,6 +41,30 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
           .lng.toFixed(2)}`
         // JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
       );
+      var name = prompt('enter the location name');
+      var location = STORAGE.load(STORAGE.STORAGE_KEY) || {};
+      if (location[name]) {
+        alert(
+          'there already is a location by that name please use different name'
+        );
+      } else {
+        let loc = {
+          name: '',
+          lat: 0,
+          lng: 0,
+          id: UTILS.getRandomInt(10000, 99000),
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        };
+        loc.name = name;
+        loc.lat = mapsMouseEvent.latLng.toJSON().lat;
+        loc.lng = mapsMouseEvent.latLng.toJSON().lng;
+        console.log(loc);
+        location[name] = loc;
+
+        STORAGE.save(STORAGE.STORAGE_KEY, location);
+      }
+
       infoWindow.open(gMap);
     });
     console.log('Map!', gMap);
