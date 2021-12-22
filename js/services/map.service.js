@@ -1,4 +1,4 @@
-import { API_KEY } from '../personal.js';
+import { API_KEYS } from '../personal.js';
 import { STORAGE } from './storage.service.js';
 import { UTILS } from './utils.js';
 import { appController } from '../app.controller.js';
@@ -7,6 +7,7 @@ export const mapService = {
   initMap,
   addMarker,
   panTo,
+  sendLocation,
 };
 
 var gMap;
@@ -99,7 +100,7 @@ function panTo(lat, lng) {
 function _connectGoogleApi() {
   if (window.google) return Promise.resolve();
   var elGoogleApi = document.createElement('script');
-  elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
+  elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEYS.mapKey}`;
   console.log('hello');
   elGoogleApi.async = true;
   document.body.append(elGoogleApi);
@@ -108,4 +109,19 @@ function _connectGoogleApi() {
     elGoogleApi.onload = resolve;
     elGoogleApi.onerror = () => reject('Google script failed to load');
   });
+}
+
+function sendLocation(value) {
+  return axios
+    .get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${value}+&key=${API_KEYS.geolocationKey}
+      `
+    )
+    .then((res) => {
+      res.data;
+      var curLat = res.data.results[0].geometry.location.lat;
+      var curLng = res.data.results[0].geometry.location.lng;
+      panTo(curLat, curLng);
+      console.log(res.data);
+    });
 }

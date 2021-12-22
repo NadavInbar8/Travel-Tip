@@ -8,6 +8,7 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onDeleteLocation = onDeleteLocation;
+window.onSearch = onSearch;
 
 function onInit() {
   mapService
@@ -53,7 +54,7 @@ function onGetUserPos() {
       document.querySelector(
         '.user-pos'
       ).innerText = `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
-      console.log(pos.coords.latitude, pos.coords.latitude)
+      console.log(pos.coords.latitude, pos.coords.latitude);
       onPanTo(pos.coords.latitude, pos.coords.latitude);
     })
     .catch((err) => {
@@ -86,6 +87,10 @@ function renderTable(dbLoc) {
   document.querySelector('tbody').innerHTML = strHTML;
 }
 
+function onSearch(ev, value) {
+  ev.preventDefault();
+  mapService.sendLocation(value);
+}
 export const appController = {
   renderTable,
 };
