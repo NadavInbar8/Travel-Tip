@@ -7,7 +7,7 @@ window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
-const storageLocs = STORAGE.load(STORAGE.STORAGE_KEY);
+window.onDeleteLocation = onDeleteLocation;
 
 function onInit() {
   mapService
@@ -33,21 +33,15 @@ function onAddMarker() {
 
 function onGetLocs() {
   locService.getLocs().then((locs) => {
-    // console.log('Locations:', locs);
+    const storageLocs = STORAGE.load(STORAGE.STORAGE_KEY);
     const locations = locs;
-    console.log(storageLocs);
-    let strHTML = '';
-    locations.map((location) => {
-      strHTML += `<tr>
-        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td> <td><button onClick="onPanTo(${location.lat},${location.lng})">Go</button></td> <td><button onClick="onDeleteLocation(${location.id})">Delete</button></td>
-        </tr>`;
+    locations.forEach((loc) => {
+      storageLocs[loc.name] = loc;
     });
-    for (const key in storageLocs) {
-      strHTML += `<tr>
-        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td><td><button onClick="onPanTo(${storageLocs[key].lat},${storageLocs[key].lng})">Go</button></td> <td><button onClick="onDeleteLocation(${storageLocs[key].id})">Delete</button></td>
-        </tr>`;
-    }
-    document.querySelector('tbody').innerHTML = strHTML;
+    STORAGE.save(STORAGE.STORAGE_KEY, storageLocs);
+    console.log('storage items: ', storageLocs);
+    renderTable(storageLocs);
+
     // locations.document.querySelector('.locs').innerText = JSON.stringify(locs);
   });
 }
@@ -69,6 +63,27 @@ function onPanTo(lat, lng) {
   mapService.panTo(lat, lng);
 }
 
-function onDeleteLocation(id) {
-  // storageLocs.splice();
+function onDeleteLocation(name) {
+  const storageLocs2 = STORAGE.load(STORAGE.STORAGE_KEY);
+  delete storageLocs2[name];
+  STORAGE.save(STORAGE.STORAGE_KEY, storageLocs2);
+  renderTable(storageLocs2);
+  mapService.initMap();
+  //console.log(storageLocs[key].name);
+  // delete storageLocs.key;
 }
+
+function renderTable(dbLoc) {
+  let strHTML = '';
+
+  for (const key in dbLoc) {
+    strHTML += `<tr>
+        <td>${dbLoc[key].name}</td><td>${dbLoc[key].lat}</td><td>${dbLoc[key].lng}</td><td><button onClick="onPanTo(${dbLoc[key].lat},${dbLoc[key].lng})">Go</button></td> <td><button onClick="onDeleteLocation('${dbLoc[key].name}')">Delete</button></td>
+        </tr>`;
+  }
+  document.querySelector('tbody').innerHTML = strHTML;
+}
+
+export const appController = {
+  renderTable,
+};

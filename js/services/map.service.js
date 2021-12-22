@@ -1,6 +1,7 @@
 import { API_KEY } from '../personal.js';
 import { STORAGE } from './storage.service.js';
 import { UTILS } from './utils.js';
+import { appController } from '../app.controller.js';
 
 export const mapService = {
   initMap,
@@ -27,29 +28,29 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
     infoWindow.open(gMap);
 
     gMap.addListener('click', (mapsMouseEvent) => {
-        // close the current window
-        infoWindow.close();
-        // create new window
-        infoWindow = new google.maps.InfoWindow({
+      // close the current window
+      infoWindow.close();
+      // create new window
+      infoWindow = new google.maps.InfoWindow({
         position: mapsMouseEvent.latLng,
-    });
-    infoWindow.setContent(
+      });
+      infoWindow.setContent(
         `the Lat is ${mapsMouseEvent.latLng
-            .toJSON()
-            .lat.toFixed(2)} and the Lng ${mapsMouseEvent.latLng
-                .toJSON()
+          .toJSON()
+          .lat.toFixed(2)} and the Lng ${mapsMouseEvent.latLng
+          .toJSON()
           .lng.toFixed(2)}`
-          // JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-          );
-          var name = prompt('enter the location name');
-          var location = STORAGE.load(STORAGE.STORAGE_KEY) || {};
-          if (location[name]) {
-              alert(
-                  'there already is a location by that name please use different name'
-                  );
-                } else {
-                    let pos = mapsMouseEvent.latLng;
-          addMarker(pos)
+        // JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+      );
+      var name = prompt('enter the location name');
+      var location = STORAGE.load(STORAGE.STORAGE_KEY) || {};
+      if (location[name]) {
+        alert(
+          'there already is a location by that name please use different name'
+        );
+      } else {
+        let pos = mapsMouseEvent.latLng;
+        addMarker(pos);
         let loc = {
           name: '',
           lat: 0,
@@ -58,14 +59,16 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
           id: UTILS.getRandomInt(10000, 99000),
           createdAt: Date.now(),
           updatedAt: Date.now(),
-        };``
+        };
+        ``;
         loc.name = name;
         loc.lat = mapsMouseEvent.latLng.toJSON().lat;
         loc.lng = mapsMouseEvent.latLng.toJSON().lng;
         console.log(loc);
         location[name] = loc;
-    
+
         STORAGE.save(STORAGE.STORAGE_KEY, location);
+        appController.renderTable(location);
       }
 
       infoWindow.open(gMap);
@@ -73,13 +76,13 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('Map!', gMap);
     const PLACES = STORAGE.load(STORAGE.STORAGE_KEY);
     for (let place in PLACES) {
-        addMarker(PLACES[place].pos);
+      addMarker(PLACES[place].pos);
     }
-});
+  });
 }
 
 function addMarker(loc) {
-    console.log(loc)
+  console.log(loc);
   var marker = new google.maps.Marker({
     position: loc,
     map: gMap,
