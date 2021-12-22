@@ -1,5 +1,6 @@
 
 import { API_KEY } from "../personal.js";
+import { STORAGE } from "./storage.service.js";
 export const mapService = {
   initMap,
   addMarker,
