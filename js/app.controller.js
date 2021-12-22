@@ -7,6 +7,7 @@ window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
+const storageLocs = STORAGE.load(STORAGE.STORAGE_KEY);
 
 function onInit() {
   mapService
@@ -34,17 +35,16 @@ function onGetLocs() {
   locService.getLocs().then((locs) => {
     // console.log('Locations:', locs);
     const locations = locs;
-    const storageLocs = STORAGE.load(STORAGE.STORAGE_KEY);
     console.log(storageLocs);
     let strHTML = '';
     locations.map((location) => {
       strHTML += `<tr>
-        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td> <td><button onClick="onGo(${location})">Go</button></td> <td><button onClick="onDelete(${location.id})">Delete</button></td>
+        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td> <td><button onClick="onPanTo(${location.lat},${location.lng})">Go</button></td> <td><button onClick="onDeleteLocation(${location.id})">Delete</button></td>
         </tr>`;
     });
     for (const key in storageLocs) {
       strHTML += `<tr>
-        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td><td><button onClick="onGo(${storageLocs[key]})">Go</button></td> <td><button onClick="onDelete(${storageLocs[key].id})">Delete</button></td>
+        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td><td><button onClick="onPanTo(${storageLocs[key].lat},${storageLocs[key].lng})">Go</button></td> <td><button onClick="onDeleteLocation(${storageLocs[key].id})">Delete</button></td>
         </tr>`;
     }
     document.querySelector('tbody').innerHTML = strHTML;
@@ -64,7 +64,11 @@ function onGetUserPos() {
       console.log('err!!!', err);
     });
 }
-function onPanTo() {
+function onPanTo(lat, lng) {
   console.log('Panning the Map');
-  mapService.panTo(35.6895, 139.6917);
+  mapService.panTo(lat, lng);
+}
+
+function onDeleteLocation(id) {
+  // storageLocs.splice();
 }
