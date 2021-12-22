@@ -39,13 +39,12 @@ function onGetLocs() {
     let strHTML = '';
     locations.map((location) => {
       strHTML += `<tr>
-        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td>
+        <td>${location.name}</td><td>${location.lat}</td><td>${location.lng}</td> <td><button onClick="onGo(${location})">Go</button></td> <td><button onClick="onDelete(${location.id})">Delete</button></td>
         </tr>`;
     });
     for (const key in storageLocs) {
-      console.log('hello');
       strHTML += `<tr>
-        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td>
+        <td>${storageLocs[key].name}</td><td>${storageLocs[key].lat}</td><td>${storageLocs[key].lng}</td><td><button onClick="onGo(${storageLocs[key]})">Go</button></td> <td><button onClick="onDelete(${storageLocs[key].id})">Delete</button></td>
         </tr>`;
     }
     document.querySelector('tbody').innerHTML = strHTML;
