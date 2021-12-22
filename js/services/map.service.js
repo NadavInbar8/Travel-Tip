@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
-import { API_KEY } from "../personal.js";
-=======
 import { API_KEY } from '../personal.js';
-
->>>>>>> b0ead103d160ee102b89a283f8471d15627e3688
 export const mapService = {
   initMap,
   addMarker,
@@ -40,19 +34,11 @@ function panTo(lat, lng) {
 }
 
 function _connectGoogleApi() {
-<<<<<<< HEAD
-    if (window.google) return Promise.resolve()
-    var elGoogleApi = document.createElement('script');
-    elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
-    elGoogleApi.async = true;
-    document.body.append(elGoogleApi);
-=======
   if (window.google) return Promise.resolve();
   var elGoogleApi = document.createElement('script');
   elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
   elGoogleApi.async = true;
   document.body.append(elGoogleApi);
->>>>>>> b0ead103d160ee102b89a283f8471d15627e3688
 
   return new Promise((resolve, reject) => {
     elGoogleApi.onload = resolve;
