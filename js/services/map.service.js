@@ -37,6 +37,7 @@ function _connectGoogleApi() {
   if (window.google) return Promise.resolve();
   var elGoogleApi = document.createElement('script');
   elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
+  console.log('hello');
   elGoogleApi.async = true;
   document.body.append(elGoogleApi);
 
