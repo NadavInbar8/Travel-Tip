@@ -53,6 +53,8 @@ function onGetUserPos() {
       document.querySelector(
         '.user-pos'
       ).innerText = `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
+      console.log(pos.coords.latitude, pos.coords.latitude)
+      onPanTo(pos.coords.latitude, pos.coords.latitude);
     })
     .catch((err) => {
       console.log('err!!!', err);
