@@ -1,3 +1,4 @@
+import { UTILS } from "./utils";
 export const locService = {
     getLocs
 }
