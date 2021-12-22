@@ -8,12 +8,39 @@ export const mapService = {
 var gMap;
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
+  const myLatLng = { lat: lat, lng: lng };
   console.log('InitMap');
   return _connectGoogleApi().then(() => {
     console.log('google available');
     gMap = new google.maps.Map(document.querySelector('#map'), {
-      center: { lat, lng },
+      center: myLatLng,
       zoom: 15,
+    });
+
+    let infoWindow = new google.maps.InfoWindow({
+      content: 'click me to get lat/lng',
+      position: myLatLng,
+    });
+    infoWindow.open(gMap);
+
+    gMap.addListener('click', (mapsMouseEvent) => {
+      // close the current window
+      infoWindow.close();
+
+      // create new window
+      infoWindow = new google.maps.InfoWindow({
+        position: mapsMouseEvent.latLng,
+      });
+      console.log(mapsMouseEvent.latLng.toJSON().lat.toFixed(2));
+      infoWindow.setContent(
+        `the Lat is ${mapsMouseEvent.latLng
+          .toJSON()
+          .lat.toFixed(2)} and the Lng ${mapsMouseEvent.latLng
+          .toJSON()
+          .lng.toFixed(2)}`
+        // JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+      );
+      infoWindow.open(gMap);
     });
     console.log('Map!', gMap);
   });
@@ -45,4 +72,8 @@ function _connectGoogleApi() {
     elGoogleApi.onload = resolve;
     elGoogleApi.onerror = () => reject('Google script failed to load');
   });
+}
+
+function getLocationByClick(ev) {
+  console.log(ev);
 }
